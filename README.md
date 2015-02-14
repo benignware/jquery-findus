@@ -43,7 +43,7 @@ Options
     <td>bindResize</td><td>Specififies whether to bind window resize. Defaults to true.</td>
   </tr>
   <tr>
-    <td>content</td><td>HTML content to be shown in info-window. Can contain a geocodeable string wrapped in an address-tag.</td>
+    <td>content</td><td>HTML content to be shown in info-window. A geocodeable string can be explicitly defined by containing it in an address-tag.</td>
   </tr>
   <tr>
     <td>latitude</td><td>Location coordinate latitude</td>
