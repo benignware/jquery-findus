@@ -1,0 +1,22 @@
+{
+  "name": "jquery-findus",
+  "version": "0.0.1",
+  "homepage": "https://github.com/benignware/jquery-findus",
+  "authors": [
+    "Rafael Nowrotek <mail@benignware.com>"
+  ],
+  "description": "Create contact-maps easily",
+  "main": "dist/jquery.findus.min.js",
+  "keywords": [
+    "jquery-plugin",
+    "google-maps"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
