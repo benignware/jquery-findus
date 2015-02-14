@@ -40,7 +40,7 @@ Options
     <td>address</td><td>A geocodeable address string</td>
   </tr>
   <tr>
-    <td>autoShow</td><td>Specififies whether to auto show info-window. Defaults to `true`</td>
+    <td>autoShow</td><td>Specififies whether to auto show info-window. Defaults to true.</td>
   <tr>
     <td>bindResize</td><td>Specififies whether to bind window resize. Defaults to true.</td>
   </tr>
@@ -58,7 +58,7 @@ Options
   </tr>
   <tr>
     <td>map</td><td>Options passed to the map instance. Defaults to <br/>
-    `{<br/>
+    {<br/>
         &nbsp;&nbsp;zoom: 15,<br/>
         &nbsp;&nbsp;mapTypeId: google.maps.MapTypeId.ROADMAP,<br/>
         &nbsp;&nbsp;disableDefaultUI: true,<br/>
@@ -66,7 +66,7 @@ Options
         &nbsp;&nbsp;zoomControl: false, <br/>
         &nbsp;&nbsp;scrollwheel: false, <br/>
         &nbsp;&nbsp;disableDoubleClickZoom: true<br/>
-      }`</td>
+      }</td>
   </tr>
   <tr>
     <td>marker</td><td>Options passed to the marker instance</td>
