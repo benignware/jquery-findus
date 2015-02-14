@@ -84,10 +84,10 @@ Methods
     <td>getOptions()</td><td>Gets options</td><td>object</td>
   </tr>
   <tr>
-    <td>resize</td><td>Resizes map</td><td>void</td>
+    <td>resize()</td><td>Resizes map</td><td>void</td>
   </tr>
   <tr>
-    <td>refresh</td><td>Refreshes the component</td><td>void</td>
+    <td>refresh()</td><td>Refreshes the component</td><td>void</td>
   </tr>
   <tr>
     <td>setOptions(options)</td><td>Sets options</td><td>void</td>
