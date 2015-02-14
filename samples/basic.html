@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery-findus</title>
+    
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    
+    <script src="../src/jquery.findus.js"></script>
+    <script>
+      
+      $(function() {
+        $('.findus').findus();
+      });
+      
+    </script>
+    
+  </head>
+  <body>
+    
+    <div class="container">
+      
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">jquery-findus</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="index.html">Usage</a></li>
+              <li><a href="advanced.html">Advanced</a></li>
+              <li><a href="bootstrap.html">Bootstrap</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+      
+      <div class="page-header">
+        <h1>Basic Usage</h1>
+      </div>
+      
+      
+      <p>Initialize jquery-findus</p>
+      <pre>$(function() {
+  $('.findus').findus();
+})</pre>
+
+
+      <h2>Address</h2>
+      <p>A map can be quickly setup by providing an address. The location will be geocoded and the specified address ist printed into the infowindow.</p>
+      <pre>&lt;div class=&quot;findus&quot; data-address=&quot;280 Broadway, New York, NY 10007, USA&quot;&gt;&lt;/div&gt;</pre>
+      <div class="findus" data-address="280 Broadway, New York, NY 10007, USA"></div>
+      
+      
+      <h2>Coordinates</h2>
+      <p>When specifying coordinates, the address is reverse geocoded and printed into the infowindow.</p>
+      <pre>&lt;div class=&quot;findus&quot; data-latitude=&quot;40.7142700&quot; data-longitude=&quot;-74.0059700&quot;&gt;&lt;/div&gt;</pre>
+      <div class="findus" data-latitude="40.7142700" data-longitude="-74.0059700"></div>
+      
+      <h2>Content</h2>
+      <p>The content of the infowindow can be customized by providing html as dom children or escaped data-attribute.<br/>
+      If no other options are specified, the location will be geocoded by the content. A geocodeable string can be expliclity defined if contained in an address-element.</p>
+      <pre>&lt;div class=&quot;findus&quot;&gt;
+  &lt;h5&gt;Find us here&lt;/h5&gt;
+  &lt;address&gt;
+    8411 Market Street&lt;br/&gt;
+    San Francisco&lt;br/&gt;
+    CA 94103&lt;br/&gt;
+  &lt;/address&gt;
+&lt;/div&gt;</pre>
+      <div class="findus">
+        <h5>Find us here</h5>
+        <address>
+        8411 Market Street<br/>
+        San Francisco<br/>
+        CA 94103<br/>
+        </address>
+      </div>
+    
+    </div>
+    
+  </body>
+</html>

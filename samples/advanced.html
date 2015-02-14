@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>jquery-findus</title>
+    
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+    
+    <script src="../src/jquery.findus.js"></script>
+    <script>
+      
+      $(function() {
+        $('.findus').findus();
+      });
+      
+    </script>
+    
+  </head>
+  <body>
+    
+    
+
+    <div class="container">
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">jquery-findus</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="basic.html">Usage</a></li>
+              <li class="active"><a href="advanced.html">Advanced</a></li>
+              <li><a href="bootstrap.html">Bootstrap</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+      
+      <div class="page-header">
+        <h1>Advanced Usage</h1>
+      </div>
+      
+      <p>Initialize jquery-findus</p>
+      <pre>$(function() {
+  $('.findus').findus();
+})</pre>
+      
+      <h2>Update plugin instance</h2>
+      <p>In order to update the component, simply call the plugin again with another set of options </p>      
+      
+      <pre>&lt;div id=&quot;update-findus-example&quot;&gt;
+  &lt;div class=&quot;btn-group form-group&quot;&gt;
+    &lt;a class=&quot;btn btn-default&quot; data-address=&quot;New York&quot;&gt;New York&lt;/a&gt;
+    &lt;a class=&quot;btn btn-default&quot; data-address=&quot;Rio de Janeiro&quot;&gt;Rio&lt;/a&gt;
+    &lt;a class=&quot;btn btn-default&quot; data-address=&quot;Tokyo&quot;&gt;Tokyo&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;findus&quot; data-address=&quot;New York&quot;&gt;&lt;/div&gt;
+  &lt;script&gt;
+    $('#update-findus-example .btn').on('click', function() {
+      $('#update-findus-example .findus').findus($(this).data());
+    });
+  &lt;/script&gt;
+&lt;/div&gt;</pre>
+      <div id="update-findus-example">
+        <div class="btn-group form-group">
+          <a class="btn btn-default" data-address="New York">New York</a>
+          <a class="btn btn-default" data-address="Rio de Janeiro">Rio</a>
+          <a class="btn btn-default" data-address="Tokyo">Tokyo</a>
+        </div>
+        <div class="findus" data-address="New York"></div>
+        <script>
+          $('#update-findus-example .btn').on('click', function() {
+            $('#update-findus-example .findus').findus($(this).data());
+          });
+        </script>
+      </div>
+    
+    </div>
+    
+  </body>
+</html>

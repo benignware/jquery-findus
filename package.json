@@ -1,0 +1,15 @@
+{
+  "name": "jquery-findus",
+  "description": "Create contact maps easily",
+  "version": "0.0.1",
+  "repository": {
+	  "type": "git",
+	  "url": "git://github.com/benignware/jquery-findus.git"
+	},
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-copy": "",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-uglify": ""
+  }
+}
