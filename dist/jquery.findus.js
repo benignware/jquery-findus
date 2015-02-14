@@ -1,5 +1,11 @@
 (function($) {
   
+  /**
+   * jquery-findus
+   * Create contact-maps easily
+   */
+  
+  
   var 
     pluginName = "findus",
     // Cache
