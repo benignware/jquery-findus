@@ -34,28 +34,42 @@ Options
 -------
 <table>
   <tr>
-    <th>Name</th><th>Description</th><th>Default</th>
+    <th>Name</th><th>Description</th>
   </tr>
   <tr>
-    <td>address</td><td>A geocodeable address string</td><td>empty</td>
+    <td>address</td><td>A geocodeable address string</td>
   </tr>
   <tr>
-    <td>autoShow</td><td>Specififes whether to auto show info-window</td><td>true</td>
+    <td>autoShow</td><td>Specififies whether to auto show info-window. Defaults to `true`</td>
+  <tr>
+    <td>bindResize</td><td>Specififies whether to bind window resize. Defaults to true.</td>
   </tr>
   <tr>
-    <td>bindResize</td><td>Specififes whether to bind window resize</td><td>true</td>
+    <td>content</td><td>HTML content to be shown in info-window. Can contain a geocodeable string wrapped in an address-tag.</td>
   </tr>
   <tr>
-    <td>content</td><td>HTML content to be shown in info-window. Can contain a geocodeable string wrapped in an address-tag.</td><td>empty</td>
+    <td>latitude</td><td>Location coordinate latitude</td>
   </tr>
   <tr>
-    <td>info</td><td>Options passed to the info-window instance</td><td>object</td>
+    <td>longitude</td><td>Location coordinate longitude</td>
   </tr>
   <tr>
-    <td>map</td><td>Options passed to the map instance</td><td>object</td>
+    <td>info</td><td>Options passed to the info-window instance</td>
   </tr>
   <tr>
-    <td>marker</td><td>Options passed to the marker instance</td><td>object</td>
+    <td>map</td><td>Options passed to the map instance. Defaults to <br/>
+    `{<br/>
+        &nbsp;&nbsp;zoom: 15,<br/>
+        &nbsp;&nbsp;mapTypeId: google.maps.MapTypeId.ROADMAP,<br/>
+        &nbsp;&nbsp;disableDefaultUI: true,<br/>
+        &nbsp;&nbsp;draggable: false, <br/>
+        &nbsp;&nbsp;zoomControl: false, <br/>
+        &nbsp;&nbsp;scrollwheel: false, <br/>
+        &nbsp;&nbsp;disableDoubleClickZoom: true<br/>
+      }`</td>
+  </tr>
+  <tr>
+    <td>marker</td><td>Options passed to the marker instance</td>
   </tr>
 </table>
 
