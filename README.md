@@ -1,7 +1,7 @@
 jquery-findus
 ================
 
-> Create contact maps easily.
+> Create contact-maps easily.
 
 This plugins let's you quickly build a customizable map without hassling with google maps api. 
 
