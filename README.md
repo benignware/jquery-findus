@@ -8,13 +8,7 @@ This plugins let's you quickly build a customizable map without hassling with go
 Basic Usage
 -----------
 
-Initialize findus:
 
-```js
-$(function() {
-  $('.findus').findus();
-});
-```
 
 Provide some content containing a geocodeable address:
 ```html
@@ -28,7 +22,11 @@ Provide some content containing a geocodeable address:
 </div>
 ```
 
+Initialize findus:
 
+```js
+$('.findus').findus();
+```
 
 Options
 -------
