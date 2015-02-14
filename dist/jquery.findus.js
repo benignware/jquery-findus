@@ -15,11 +15,13 @@
     }
     
     var defaults = {
-      bindResize: true,
-      minWidth: 0, 
-      minHeight: 420,
       address: "",
+      autoShow: true,
+      bindResize: true,
       content: "",
+      info: {
+        // InfoWindow options
+      },
       map: {
         // Map options
         zoom: 15,
@@ -34,10 +36,8 @@
         // Marker options
         //animation: google.maps.Animation.DROP
       },
-      info: {
-        // InfoWindow options
-      },
-      autoShow: true
+      minWidth: 0, 
+      minHeight: 420
     };
     
     
@@ -292,8 +292,8 @@
         return $(this).data(pluginName) || null; 
       }).each(function() {
         this.resize();
-      })
-      .css('display', '');
+      });
+    $target.css('display', '');
   });
   
 })(jQuery);
