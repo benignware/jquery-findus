@@ -292,8 +292,8 @@
         return $(this).data(pluginName) || null; 
       }).each(function() {
         this.resize();
-      })
-      .css('display', '');
+      });
+    $target.css('display', '');
   });
   
 })(jQuery);
