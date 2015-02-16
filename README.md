@@ -38,9 +38,9 @@ Options
     <td>address</td><td>A geocodeable address string</td>
   </tr>
   <tr>
-    <td>autoShow</td><td>Specififies whether to auto show info-window. Defaults to true.</td>
+    <td>autoShow</td><td>Specifies whether to auto show info-window. Defaults to true.</td>
   <tr>
-    <td>bindResize</td><td>Specififies whether to bind window resize. Defaults to true.</td>
+    <td>bindResize</td><td>Specifies whether to bind window resize. Defaults to true.</td>
   </tr>
   <tr>
     <td>content</td><td>HTML content to be shown in info-window. A geocodeable string can be explicitly defined by containing it in an address-tag.</td>
