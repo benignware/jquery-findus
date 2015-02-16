@@ -38,7 +38,7 @@ Options
     <td>address</td><td>A geocodeable address string</td>
   </tr>
   <tr>
-    <td>autoShow</td><td>Specifies whether to auto show info-window. Defaults to true.</td>
+    <td>autoShow</td><td>Specifies whether to show info-window on render. Defaults to true.</td>
   <tr>
     <td>bindResize</td><td>Specifies whether to bind window resize. Defaults to true.</td>
   </tr>
