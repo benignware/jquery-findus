@@ -1,17 +1,56 @@
 (function($) {
   
-  /**
-   * jquery-findus
-   * Create contact-maps easily
-   */
-  
-  
   var 
     pluginName = "findus",
     // Cache
     google = window.google,
     geocoded = {},
-    reverseGeocoded = {};
+    reverseGeocoded = {},
+    
+    
+    /**
+     * Camelize a string
+     * @param {String} string
+     */ 
+    camelize = (function() {
+      var cache = {};
+      return function(string) {
+        return cache[string] = cache[string] || (function() {
+          return string.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
+        })();
+      };
+    })(),
+  
+    /**
+     * Hyphenate a string
+     * @param {String} string
+     */
+    hyphenate = (function() {
+      var cache = {};
+      return function(string) {
+        return cache[string] = cache[string] || (function() {
+          return string.replace(/([A-Z])/g, function($1){return "-"+$1.toLowerCase();});
+        })();
+      };
+    })(),
+    /**
+     * Converts data-options to camel-case while respecting object-prefixes
+     */
+    filterPrefixedOptions = function (options, prefixes) {
+      var key, i, prefix, name;
+      for (key in options) {
+        for (i = 0; i < prefixes.length; i++) {
+          prefix = prefixes[i];
+          if (key.substring(0, prefix.length) === prefix && key.length > prefix.length) {
+            name = key.substring(prefix.length, prefix.length + 1).toLowerCase() + key.substring(prefix.length + 1);
+            options[prefix] = options[prefix] || {};
+            options[prefix][name] = options[key];
+            delete options[key];
+          }
+        }
+      }
+      return options;
+    };
   
   function FindUs(elem, options) {
     
@@ -30,10 +69,10 @@
       },
       map: {
         // Map options
-        zoom: 15,
+        zoom: 14,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true,
-        draggable: false, 
+        draggable: true, 
         zoomControl: false, 
         scrollwheel: false, 
         disableDoubleClickZoom: true
@@ -110,6 +149,7 @@
     }
     
     function updateInfoWindow() {
+      
       var infoOpts = $.extend(true, {}, options.info, {
         content: options.content || options.address && $.trim(options.address).split(",").join("<br/>") || (function(lat, lng) {
           if (reverseGeocoded[lat + "," + lng]) {
@@ -117,6 +157,7 @@
           }
         })(options.latitude, options.longitude)
       });
+      
       if (infoWindow) {
         // Update infowindow
         infoWindow.setOptions(infoOpts);
@@ -125,13 +166,6 @@
         infoWindow = new google.maps.InfoWindow(infoOpts);
       }
       
-      /*
-      google.maps.event.addListenerOnce(infoWindow, 'domready', function(){
-        var infoWindowContainer = $(".gm-style-iw").parent();
-        infoWindowContainer.hide().fadeIn(400);
-        console.log("infowindow dom ready");
-      });
-      */
     }
     
     function updateMap() {
@@ -257,9 +291,11 @@
     };
     
     // Init options
+    
+    
     options = $.extend(true, {}, defaults, options, {
       content: $elem.html().replace(/^\s+|\s+$/g, '') 
-    }, $elem.data());
+    }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"]));
     
     // Clear elem
     $elem.html('');
