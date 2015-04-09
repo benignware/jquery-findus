@@ -71,6 +71,20 @@ Options
   </tr>
 </table>
 
+#### Data-Attributes
+Use data-attributes to setup the component. Target object-options by using prefixes, such as 'marker-icon'.
+```html
+<div class="findus" data-auto-show="false" data-marker-icon="information.png">
+  <h5>Find us here</h5>
+  <address>
+  8411 Market Street<br/>
+  San Francisco<br/>
+  CA 94103<br/>
+  </address>
+</div>
+```
+      
+
 Methods
 -------
 
