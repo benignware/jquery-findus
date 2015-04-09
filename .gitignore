@@ -11,3 +11,6 @@ node_modules
 
 # GFM Markdown preview
 .README.md.html
+
+# Bower plugin dependencies
+bower_components
