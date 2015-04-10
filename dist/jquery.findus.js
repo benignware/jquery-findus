@@ -9,31 +9,6 @@
     
     
     /**
-     * Camelize a string
-     * @param {String} string
-     */ 
-    camelize = (function() {
-      var cache = {};
-      return function(string) {
-        return cache[string] = cache[string] || (function() {
-          return string.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
-        })();
-      };
-    })(),
-  
-    /**
-     * Hyphenate a string
-     * @param {String} string
-     */
-    hyphenate = (function() {
-      var cache = {};
-      return function(string) {
-        return cache[string] = cache[string] || (function() {
-          return string.replace(/([A-Z])/g, function($1){return "-"+$1.toLowerCase();});
-        })();
-      };
-    })(),
-    /**
      * Converts data-options to camel-case while respecting object-prefixes
      */
     filterPrefixedOptions = function (options, prefixes) {
@@ -72,7 +47,7 @@
         zoom: 14,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true,
-        draggable: true, 
+        draggable: false, 
         zoomControl: false, 
         scrollwheel: false, 
         disableDoubleClickZoom: true
