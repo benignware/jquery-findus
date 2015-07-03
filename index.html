@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css">
+    <link type="text/css" rel="stylesheet" href="http://cdn.rawgit.com/richleland/pygments-css/master/github.css">
+    <title>jquery-findus</title>
+    <style>
+      .highlight-example:after {
+        color: #959595;
+        content: "Example";
+        font-size: 12px;
+        font-weight: 700;
+        left: 15px;
+        letter-spacing: 1px;
+        position: absolute;
+        text-transform: uppercase;
+        top: 15px;
+      }
+      
+      .highlight-example {
+        border-color: #e5e5e5 #eee #eee;
+        border-style: solid;
+        border-width: 1px 0;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05) inset;
+        margin: 0 -15px 15px;
+        padding: 45px 15px 15px;
+        position: relative;
+      }
+      
+      .highlight-example {
+        background-color: #fff;
+        border-color: #ddd;
+        border-radius: 4px 4px 0 0;
+        border-width: 1px;
+        box-shadow: none;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      .highlight-example + .highlight {
+          border-bottom-left-radius: 4px;
+          border-bottom-right-radius: 4px;
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+          border-width: 1px;
+          margin: -16px 0 15px;
+          border-width: 1px;
+      }
+
+      .highlight {
+          background-color: #f7f7f9;
+          border: 1px solid #e1e1e8;
+          border-radius: 4px;
+          margin-bottom: 14px;
+          padding: 0;
+      }
+
+      .highlight pre {
+          background-color: transparent;
+          border: 0 none;
+          margin-bottom: 0;
+          margin-top: 0;
+          padding: 0;
+      }
+      
+      article.markdown-body {
+        max-width: 728px;
+        margin: 50px auto;
+      }
+
+    </style>
+  </head>
+  <body>
+    
+    <a href="https://github.com/benignware/jquery-findus"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+    
+    <article class="markdown-body"><h1 id="jquery-findus">jquery-findus</h1>
+<blockquote>
+<p>Create contact-maps easily.</p>
+</blockquote>
+<p>This plugin lets you quickly build a customizable map without hassling with google maps api. </p>
+<h2 id="usage">Usage</h2>
+<p>Include dependencies</p>
+<div><script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="jquery.findus.min.js"></script>
+</div>
+
+
+
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;https://code.jquery.com/jquery-1.11.2.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;http://maps.googleapis.com/maps/api/js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;jquery.findus.min.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<p>Provide some content containing a geocodeable address:</p>
+<div class="highlight-example">
+<div class="findus">
+  <h5>Find us here</h5>
+  <address>
+  8411 Market Street<br>
+  San Francisco<br>
+  CA 94103<br>
+  </address>
+</div>
+</div>
+
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;findus&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;h5&gt;</span>Find us here<span class="nt">&lt;/h5&gt;</span>
+  <span class="nt">&lt;address&gt;</span>
+  8411 Market Street<span class="nt">&lt;br/&gt;</span>
+  San Francisco<span class="nt">&lt;br/&gt;</span>
+  CA 94103<span class="nt">&lt;br/&gt;</span>
+  <span class="nt">&lt;/address&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<p>Initialize findus:</p>
+<script>
+$('.findus').findus();
+</script>
+
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.findus&#39;</span><span class="p">).</span><span class="nx">findus</span><span class="p">();</span>
+</pre></div>
+<h2 id="options">Options</h2>
+<table>
+  <tr>
+    <th>Name</th><th>Description</th>
+  </tr>
+  <tr>
+    <td>address</td><td>A geocodeable address string</td>
+  </tr>
+  <tr>
+    <td>autoShow</td><td>Specifies whether to show info-window on render. Defaults to true.</td>
+  <tr>
+    <td>bindResize</td><td>Specifies whether to bind window resize. Defaults to true.</td>
+  </tr>
+  <tr>
+    <td>content</td><td>HTML content to be shown in info-window. A geocodeable string can be explicitly defined by containing it in an address-tag.</td>
+  </tr>
+  <tr>
+    <td>latitude</td><td>Location coordinate latitude</td>
+  </tr>
+  <tr>
+    <td>longitude</td><td>Location coordinate longitude</td>
+  </tr>
+  <tr>
+    <td>info</td><td>Options passed to the info-window instance</td>
+  </tr>
+  <tr>
+    <td>map</td><td>Options passed to the map instance. Defaults to <br/>
+    {<br/>
+        &nbsp;&nbsp;zoom: 15,<br/>
+        &nbsp;&nbsp;mapTypeId: google.maps.MapTypeId.ROADMAP,<br/>
+        &nbsp;&nbsp;disableDefaultUI: true,<br/>
+        &nbsp;&nbsp;draggable: false, <br/>
+        &nbsp;&nbsp;zoomControl: false, <br/>
+        &nbsp;&nbsp;scrollwheel: false, <br/>
+        &nbsp;&nbsp;disableDoubleClickZoom: true<br/>
+      }</td>
+  </tr>
+  <tr>
+    <td>marker</td><td>Options passed to the marker instance</td>
+  </tr>
+</table>
+
+<p>You can also use data-attributes to setup the component. Target options by using prefixes, such as &#39;marker-icon&#39;.</p>
+</article>
+  </body>
+</html>
