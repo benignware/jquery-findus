@@ -5,7 +5,6 @@
     geocoded = {},
     reverseGeocoded = {},
     
-    
     /**
      * Converts data-options to camel-case while respecting object-prefixes
      */
@@ -28,8 +27,8 @@
   function FindUs(elem, options) {
     
     if (!google || !google.maps) {
-      console.warn("jquery-findus needs Google Maps API");
-      //return;
+      console.error("jquery-findus needs Google Maps API");
+      return;
     }
     
     var defaults = {
@@ -124,7 +123,6 @@
     }
     
     function updateInfoWindow() {
-      console.log("update info window");
       var infoOpts = $.extend(true, {}, options.info, {
         content: options.content || options.address && $.trim(options.address).split(",").join("<br/>") || (function(lat, lng) {
           if (reverseGeocoded[lat + "," + lng]) {
@@ -140,20 +138,15 @@
         // Init infowindow
         infoWindow = new google.maps.InfoWindow(infoOpts);
       }
-      
-      
     }
     
     function updateMap() {
-      console.log("update map");
       if (!center) {
         return;
       }
-      
       var mapOptions = $.extend(true, {}, options.map, {
         center: center
       });
-      console.log("mapOptions: ", mapOptions);
       if (map) {
         // Update map
         map.setOptions(mapOptions);
@@ -260,7 +253,6 @@
       }
       
       if (map) {
-        console.log("resize map");
         // Adjust center
         google.maps.event.clearListeners(map, 'center_changed');
         window.clearTimeout(centerTimeoutId);
@@ -282,8 +274,6 @@
     options = $.extend(true, {}, defaults, options, {
       content: $elem.html().replace(/^\s+|\s+$/g, '') 
     }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"]));
-    
-    console.log("options: ", $elem.data(), filterPrefixedOptions($elem.data(), ["map", "marker", "info"]));
     
     // Clear elem
     $elem.html('');
