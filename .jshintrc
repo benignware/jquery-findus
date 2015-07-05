@@ -14,6 +14,7 @@
     "window": false, 
     "document": false,
     "$": false,
-    "jQuery": false
+    "jQuery": false,
+    "google": false
   }
 }
