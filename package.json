@@ -23,6 +23,7 @@
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-uglify": "",
     "grunt-jekyll-docs": "^0.1.4",
+    "grunt-livemd": "0.0.1",
     "grunt-marked": "^0.1.1",
     "grunt-md2html": "^0.2.1",
     "lodash": "^3.10.0",
