@@ -14,3 +14,12 @@ node_modules
 
 # Bower plugin dependencies
 bower_components
+
+# Site
+site
+
+# Grunt
+.grunt
+
+# Temporary
+tmp
