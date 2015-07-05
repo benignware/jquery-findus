@@ -2,11 +2,8 @@
   
   var 
     pluginName = "findus",
-    // Cache
-    google = window.google,
     geocoded = {},
     reverseGeocoded = {},
-    
     
     /**
      * Converts data-options to camel-case while respecting object-prefixes
@@ -30,7 +27,7 @@
   function FindUs(elem, options) {
     
     if (!google || !google.maps) {
-      console.warn("Google maps not found");
+      console.error("jquery-findus needs Google Maps API");
       return;
     }
     
@@ -57,7 +54,7 @@
         //animation: google.maps.Animation.DROP
       },
       minWidth: 0, 
-      minHeight: 420
+      minHeight: 440
     };
     
     
@@ -118,13 +115,14 @@
       if (options.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
         infoWindowTimeoutId = setTimeout(function() {
           infoWindow.open(map, marker);
+          // Fix icon
+          $(elem).find('img[src*="gstatic.com/"], img[src*="googleapis.com/"]').css('max-width', 'none');
           marker.setAnimation(null);
         }, marker.getAnimation() ? 700 : 350);
       }
     }
     
     function updateInfoWindow() {
-      
       var infoOpts = $.extend(true, {}, options.info, {
         content: options.content || options.address && $.trim(options.address).split(",").join("<br/>") || (function(lat, lng) {
           if (reverseGeocoded[lat + "," + lng]) {
@@ -140,18 +138,15 @@
         // Init infowindow
         infoWindow = new google.maps.InfoWindow(infoOpts);
       }
-      
     }
     
     function updateMap() {
       if (!center) {
         return;
       }
-      
       var mapOptions = $.extend(true, {}, options.map, {
         center: center
       });
-      
       if (map) {
         // Update map
         map.setOptions(mapOptions);
@@ -163,14 +158,21 @@
         // Init map listeners
         google.maps.event.addListener(map, "click", mapClickHandler);
       }
-      google.maps.event.addListenerOnce(map, 'tilesloaded', function(){
+      google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
         // Update marker when tiles have been loaded
         updateMarker();
+        
       });
+      
+      
       
     }
     
     this.refresh = function() {
+      
+      if (!google.maps.Geocoder || !google.maps.LatLng) {
+        return;
+      }
       
       geocoder = geocoder || new google.maps.Geocoder();
       
@@ -251,7 +253,6 @@
       }
       
       if (map) {
-        
         // Adjust center
         google.maps.event.clearListeners(map, 'center_changed');
         window.clearTimeout(centerTimeoutId);
@@ -260,13 +261,15 @@
           google.maps.event.addListener(map, 'center_changed', centerChanged);
         }, 0);
         
+        
         // Resize map
         google.maps.event.trigger(map, 'resize');
       }
+      
+      
     };
     
     // Init options
-    
     
     options = $.extend(true, {}, defaults, options, {
       content: $elem.html().replace(/^\s+|\s+$/g, '') 
