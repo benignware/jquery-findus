@@ -1,16 +1,25 @@
 jquery-findus
-================
+=============
 
 > Create contact-maps easily.
 
-This plugin let's you quickly build a customizable map without hassling with google maps api. 
+This plugin lets you quickly build a customizable map without hassling with google maps api. 
 
-Basic Usage
------------
+[Demo](http://benignware.github.io/jquery-findus)
 
+Usage
+-----
 
+Include dependencies
+
+```html
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="jquery.findus.min.js"></script>
+```
 
 Provide some content containing a geocodeable address:
+
 ```html
 <div class="findus">
   <h5>Find us here</h5>
@@ -71,37 +80,5 @@ Options
   </tr>
 </table>
 
-### Data-Attributes
 You can also use data-attributes to setup the component. Target options by using prefixes, such as 'marker-icon'.
-```html
-<div class="findus" data-auto-show="false" data-marker-icon="information.png">
-  <h5>Find us here</h5>
-  <address>
-  8411 Market Street<br/>
-  San Francisco<br/>
-  CA 94103<br/>
-  </address>
-</div>
-```
 
-
-Methods
--------
-
-<table>
-  <tr>
-    <th>Name</th><th>Description</th><th>Return</th>
-  </tr>
-  <tr>
-    <td>getOptions()</td><td>Gets options</td><td>object</td>
-  </tr>
-  <tr>
-    <td>resize()</td><td>Resizes map</td><td>void</td>
-  </tr>
-  <tr>
-    <td>refresh()</td><td>Refreshes the component</td><td>void</td>
-  </tr>
-  <tr>
-    <td>setOptions(options)</td><td>Sets options</td><td>void</td>
-  </tr>
-</table>
