@@ -1,7 +1,6 @@
 (function($) {
   
   var 
-    pluginName = "findus",
     geocoded = {},
     reverseGeocoded = {},
     
@@ -31,36 +30,36 @@
       return;
     }
     
-    var defaults = {
-      address: "",
-      autoShow: true,
-      bindResize: true,
-      content: "",
-      info: {
-        // InfoWindow options
+    var
+      defaults = {
+        address: "",
+        autoShow: true,
+        bindResize: true,
+        content: "",
+        info: {
+          // InfoWindow options
+        },
+        map: {
+          // Map options
+          zoom: 14,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          disableDefaultUI: true,
+          draggable: false, 
+          zoomControl: false, 
+          scrollwheel: false, 
+          disableDoubleClickZoom: true
+        },
+        marker: {
+          // Marker options
+          //animation: google.maps.Animation.DROP
+        },
+        minWidth: 0, 
+        minHeight: 440
       },
-      map: {
-        // Map options
-        zoom: 14,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: true,
-        draggable: false, 
-        zoomControl: false, 
-        scrollwheel: false, 
-        disableDoubleClickZoom: true
-      },
-      marker: {
-        // Marker options
-        //animation: google.maps.Animation.DROP
-      },
-      minWidth: 0, 
-      minHeight: 440
-    };
-    
-    
-    var 
+      opts = {},
       instance = this, 
       $elem = $(elem),
+      content = $elem.html().replace(/^\s+|\s+$/g, ''),
       center,
       centerTimeoutId,
       map,
@@ -78,7 +77,7 @@
     }
     
     function markerClickHandler(event) {
-      if (options.content || options.address) {
+      if (opts.content || opts.address) {
         var infoWindowOpened = (infoWindow.getMap());
         if (infoWindowOpened) {
           infoWindow.close();
@@ -94,7 +93,7 @@
     
     function updateMarker() {
       var 
-        markerOptions = $.extend(true, {}, options.marker, {
+        markerOptions = $.extend(true, {}, opts.marker, {
           map: map,
           position: center
         }), 
@@ -112,7 +111,7 @@
       
       updateInfoWindow();
       clearTimeout(infoWindowTimeoutId);
-      if (options.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
+      if (opts.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
         infoWindowTimeoutId = setTimeout(function() {
           infoWindow.open(map, marker);
           // Fix icon
@@ -123,12 +122,12 @@
     }
     
     function updateInfoWindow() {
-      var infoOpts = $.extend(true, {}, options.info, {
-        content: options.content || options.address && $.trim(options.address).split(",").join("<br/>") || (function(lat, lng) {
+      var infoOpts = $.extend(true, {}, opts.info, {
+        content: opts.content || opts.address && $.trim(opts.address).split(",").join("<br/>") || (function(lat, lng) {
           if (reverseGeocoded[lat + "," + lng]) {
             return reverseGeocoded[lat + "," + lng][0].formatted_address.split(",").join("<br/>");
           }
-        })(options.latitude, options.longitude)
+        })(opts.latitude, opts.longitude)
       });
       
       if (infoWindow) {
@@ -144,7 +143,7 @@
       if (!center) {
         return;
       }
-      var mapOptions = $.extend(true, {}, options.map, {
+      var mapOptions = $.extend(true, {}, opts.map, {
         center: center
       });
       if (map) {
@@ -164,11 +163,15 @@
         
       });
       
-      
-      
     }
     
-    this.refresh = function() {
+    /**
+     * Updates the component
+     * @param {Object} options
+     */
+    this.update = function(options) {
+      
+      $.extend(opts, options);
       
       if (!google.maps.Geocoder || !google.maps.LatLng) {
         return;
@@ -176,14 +179,14 @@
       
       geocoder = geocoder || new google.maps.Geocoder();
       
-      if (options.latitude && options.longitude) {
+      if (opts.latitude && opts.longitude) {
         // By coordinates
-        center = new google.maps.LatLng(options.latitude, options.longitude);
-        if (!options.content || !options.address) {
+        center = new google.maps.LatLng(opts.latitude, opts.longitude);
+        if (!opts.content || !opts.address) {
           // Reverse geocode
           geocoder.geocode( { 'latLng': center }, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
-              reverseGeocoded[options.latitude + "," + options.longitude] = results;
+              reverseGeocoded[opts.latitude + "," + opts.longitude] = results;
               updateMap();
             } else {
               console.warn("Geocoder returned with error: ", status);
@@ -193,18 +196,18 @@
           updateMap();
         }
         
-      } else if (options.content || options.address) {
+      } else if (opts.content || opts.address) {
         // By address or content
-        var string = $.map((options.address || options.content && (function(content) {
+        var string = $.map((opts.address || opts.content && (function(content) {
           return content.match(/<address/) && $("<div>" + content + "</div>").find('address').html() || content;
-        })(options.content)).split(/<(?:.|\n)*?>/gm), function(string) {
+        })(opts.content)).split(/<(?:.|\n)*?>/gm), function(string) {
           var value = $.trim(string);
           return value || null;
         }).join(",");
         
         // Geocode
         if (geocoded[string]) {
-          // Get location from previously geocoded results
+          // Get location from cached geocoded results
           center = geocoded[string][0].geometry.location;
           updateMap();
         } else {
@@ -219,35 +222,32 @@
             }
           });
         }
-        
       }
       
       // Resize
       this.resize();
     };
     
-    this.setOptions = function(opts) {
-      options = $.extend({}, options, opts);
-      this.refresh();
+    // Deprecated
+    this.setOptions = function(options) {
+      this.update(options);
     };
     
     this.getOptions = function() {
-      return $.extend({}, options);
+      return $.extend({}, opts);
     };
     
     function resizeContainer() {
       // Set size
-      var minHeight = typeof options.minHeight === 'function' ? options.minHeight.call(this, options) : options.minHeight;
-      var maxHeight = typeof options.maxHeight === 'function' ? options.maxHeight.call(this, options) : options.maxHeight;
-      $(elem).css('min-height', options.minHeight || "");
-      $(elem).css('max-height', options.maxHeight || "");
+      var minHeight = typeof opts.minHeight === 'function' ? opts.minHeight.call(this, options) : opts.minHeight;
+      var maxHeight = typeof opts.maxHeight === 'function' ? opts.maxHeight.call(this, options) : opts.maxHeight;
+      $(elem).css('min-height', opts.minHeight || "");
+      $(elem).css('max-height', opts.maxHeight || "");
     }
     
     this.resize = function() {
       
-      var options = this.getOptions();
-      
-      if (options.latitude && options.longitude || options.address || options.content) {
+      if (opts.latitude && opts.longitude || opts.address || opts.content) {
         // Only resize container if options have been specified
         resizeContainer(); 
       }
@@ -261,22 +261,19 @@
           google.maps.event.addListener(map, 'center_changed', centerChanged);
         }, 0);
         
-        
         // Resize map
         google.maps.event.trigger(map, 'resize');
       }
       
-      
     };
     
-    // Init options
+   // Clear elem
+   $elem.html('');
     
-    options = $.extend(true, {}, defaults, options, {
-      content: $elem.html().replace(/^\s+|\s+$/g, '') 
-    }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"]));
-    
-    // Clear elem
-    $elem.html('');
+    // Initial update
+   this.update($.extend(true, defaults, options, {
+      content: content
+    }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"])));
      
     // Init resize handler
     $(window).off('resize', resizeHandler);
@@ -284,19 +281,23 @@
       $(window).on('resize', resizeHandler);
     }
     
-    // Initial refresh
-    this.refresh();
   }
   
-  jQuery.fn[pluginName] = function(options) {
+  // Add Plugin to registry
+  $.fn.findus = function() {
+    var
+      args = [].slice.call(arguments);
     return this.each(function() {
-      var instance = $(this).data(pluginName);
-      if (!instance) {
-        instance = $(this).data(pluginName, new FindUs(this, options));
-      } else {
-        instance.setOptions(options);
-      }
-      return $(this);
+      return (function(instance) {
+        var
+          result;
+        // Update or init plugin
+        $(this).data('findus', instance = instance ? typeof args[0] === 'object' && instance.update(args[0]) && instance || instance : new FindUs(this, args[0]));
+        // Call method
+        result = typeof args[0] === 'string' && typeof instance[args[0]] === 'function' ? instance[args[0]].apply(instance, args.slice(1)) : result;
+        // Return undefined or chaining element
+        return typeof result !== 'undefined' ? result : this;
+      }).call(this, $(this).data('findus'));
     });
   };
   
@@ -309,7 +310,7 @@
     $target
       .css('display', 'block')
       .find('*').map(function() {
-        return $(this).data(pluginName) || null; 
+        return $(this).data('findus') || null; 
       }).each(function() {
         this.resize();
       });
