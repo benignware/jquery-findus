@@ -27,6 +27,22 @@ module.exports = function(grunt) {
         }
       }
     },
+    connect: {
+      site: {
+        options: {
+          port: 9001,
+          base: 'site',
+          keepalive: false,
+          open: true
+        }
+      }
+    },
+    watch: {
+      site: {
+        files: ['src/**/*.*', 'README.md'],
+        tasks: ['build', 'copy:site', 'livemd:site']
+      }
+    },
     livemd: {
       options: {
         prefilter: function(string) {
@@ -56,6 +72,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-contrib-watch");
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks("grunt-livemd");
   grunt.loadNpmTasks("grunt-gh-pages");
   
@@ -63,6 +81,6 @@ module.exports = function(grunt) {
   
   grunt.registerTask('build', ['copy:dist', 'uglify']);
   
-  grunt.registerTask('site', ['build', 'copy:site', 'livemd:site']);
+  grunt.registerTask('site', ['build', 'copy:site', 'livemd:site', 'connect:site', 'watch:site' ]);
   
 };
