@@ -207,12 +207,17 @@
         
       } else if (opts.content || opts.address) {
         // By address or content
-        var string = $.map((opts.address || opts.content && (function(content) {
-          return content.match(/<address/) && $("<div>" + content + "</div>").find('address').html() || content;
-        })(opts.content)).split(/<(?:.|\n)*?>/gm), function(string) {
-          var value = $.trim(string);
-          return value || null;
-        }).join(",");
+        var
+          string = $.map((opts.address || opts.content && (function(content) {
+            return content.match(/<address/) && $("<div>" + content + "</div>").find('address').html() || content;
+          })(opts.content)).split(/<(?:.|\n)*?>/gm), function(string) {
+            var value = $.trim(string);
+            return value || null;
+          }).join(",");
+        
+        // Strip phone numbers from geocodable string
+        string = string.replace(/\+\s*\d+[-\d\s\(\)]+/gi, '');
+        string = string.replace(/phone/gi, '');
         
         // Geocode
         if (geocoded[string]) {
