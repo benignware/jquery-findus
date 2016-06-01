@@ -277,7 +277,7 @@
      
     // Init resize handler
     $(window).off('resize', resizeHandler);
-    if (options.bindResize) {
+    if (opts.bindResize) {
       $(window).on('resize', resizeHandler);
     }
     
