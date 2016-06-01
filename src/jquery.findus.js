@@ -77,7 +77,7 @@
     }
     
     function markerClickHandler(event) {
-      if (opts.content || opts.address) {
+      if ((opts.content || opts.address) && infoWindow) {
         var infoWindowOpened = (infoWindow.getMap());
         if (infoWindowOpened) {
           infoWindow.close();
@@ -110,11 +110,13 @@
       }
       
       updateInfoWindow();
+      
+      // Open Window
       clearTimeout(infoWindowTimeoutId);
       if (opts.info && opts.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
         infoWindowTimeoutId = setTimeout(function() {
           infoWindow.open(map, marker);
-          // Fix icon
+          // FIXME: Google Maps icon needs max-width
           $(elem).find('img[src*="gstatic.com/"], img[src*="googleapis.com/"]').css('max-width', 'none');
           marker.setAnimation(null);
         }, marker.getAnimation() ? 700 : 350);
