@@ -111,7 +111,7 @@
       
       updateInfoWindow();
       clearTimeout(infoWindowTimeoutId);
-      if (opts.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
+      if (opts.info && opts.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
         infoWindowTimeoutId = setTimeout(function() {
           infoWindow.open(map, marker);
           // Fix icon
@@ -122,20 +122,27 @@
     }
     
     function updateInfoWindow() {
-      var infoOpts = $.extend(true, {}, opts.info, {
-        content: opts.content || opts.address && $.trim(opts.address).split(",").join("<br/>") || (function(lat, lng) {
-          if (reverseGeocoded[lat + "," + lng]) {
-            return reverseGeocoded[lat + "," + lng][0].formatted_address.split(",").join("<br/>");
-          }
-        })(opts.latitude, opts.longitude)
-      });
-      
-      if (infoWindow) {
-        // Update infowindow
-        infoWindow.setOptions(infoOpts);
+      var infoOpts;
+      if (opts.info) {
+        infoOpts = $.extend(true, {}, opts.info, {
+          content: opts.content || opts.address && $.trim(opts.address).split(",").join("<br/>") || (function(lat, lng) {
+            if (reverseGeocoded[lat + "," + lng]) {
+              return reverseGeocoded[lat + "," + lng][0].formatted_address.split(",").join("<br/>");
+            }
+          })(opts.latitude, opts.longitude)
+        });
+        if (infoWindow) {
+          // Update InfoWindow
+          infoWindow.setOptions(infoOpts);
+        } else {
+          // Init InfoWindow
+          infoWindow = new google.maps.InfoWindow(infoOpts);
+        }
       } else {
-        // Init infowindow
-        infoWindow = new google.maps.InfoWindow(infoOpts);
+        if (infoWindow) {
+          // Close InfoWindow
+          infowindow.close();
+        }
       }
     }
     
@@ -143,7 +150,7 @@
       if (!center) {
         return;
       }
-      var mapOptions = $.extend(true, {}, opts.map, {
+      var mapOptions = $.extend(true, {}, opts.map || defaults.map, {
         center: center
       });
       if (map) {
@@ -243,6 +250,8 @@
       var maxHeight = typeof opts.maxHeight === 'function' ? opts.maxHeight.call(this, options) : opts.maxHeight;
       $(elem).css('min-height', opts.minHeight || "");
       $(elem).css('max-height', opts.maxHeight || "");
+      // Set text color
+      $(elem).css('color', "black");
     }
     
     this.resize = function() {
@@ -269,11 +278,14 @@
     
    // Clear elem
    $elem.html('');
-    
+   
+   var
+     opts = $.extend(true, {}, defaults, options, {
+       content: content,
+     }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"]))
+   
     // Initial update
-   this.update($.extend(true, defaults, options, {
-      content: content
-    }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"])));
+   this.update(opts);
      
     // Init resize handler
     $(window).off('resize', resizeHandler);
