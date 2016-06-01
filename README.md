@@ -14,7 +14,7 @@ Include dependencies
 
 ```html
 <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="jquery.findus.min.js"></script>
 ```
 
