@@ -219,6 +219,7 @@
         string = string.replace(/\+\s*\d+[-\d\s\(\)]+/gi, '');
         string = string.replace(/phone/gi, '');
         
+        
         // Geocode
         if (geocoded[string]) {
           // Get location from cached geocoded results
@@ -293,6 +294,8 @@
    
     // Initial update
    this.update(opts);
+   
+   this.resize();
      
     // Init resize handler
     $(window).off('resize', resizeHandler);
