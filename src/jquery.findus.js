@@ -88,16 +88,21 @@
     }
     
     function mapClickHandler() {
-      infoWindow.close();
+      if (infoWindow) {
+        infoWindow.close();
+      }
     }
     
     function updateMarker() {
+      
       var 
         markerOptions = $.extend(true, {}, opts.marker, {
           map: map,
           position: center
         }), 
         markerPosition = marker && marker.getPosition() || null;
+      
+      
       
       if (marker) {
         // Update marker
