@@ -20,6 +20,7 @@
     "grunt-contrib-copy": "",
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-uglify": "",
-    "grunt-livemd": "^0.0.2"
+    "grunt-gh-pages": "^2.0.0",
+    "grunt-livemd": "^0.0.6"
   }
 }
