@@ -120,8 +120,7 @@ You can also use data-attributes to setup the component. Target subsets by using
 
 #### Master
 
-* Optimize geocoding from content
-* Bugfixes
+* Optimize content geocoding
 
 #### v0.0.5
 
