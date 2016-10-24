@@ -95,7 +95,7 @@ You can also use data-attributes to setup the component. Target options by using
 
 #### v0.0.4
 
-* Set map option 'draggable' default to false
+* Set map option 'draggable' to false by default
 
 #### v0.0.3 
 
@@ -103,7 +103,9 @@ You can also use data-attributes to setup the component. Target options by using
 
 #### v0.0.2
 
-* Added prefixed data-attributes. Changed zoom default to 14. Draggable map by default.
+* Added prefixed data-attributes. 
+* Changed zoom default to 14. 
+* Draggable map by default.
 
 #### v0.0.1
 
