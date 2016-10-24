@@ -1,44 +1,80 @@
-jquery-findus
-=============
+# jquery-findus
 
 > Create contact-maps easily.
 
-This plugin lets you quickly build a customizable map without hassling with google maps api. 
+A jquery-plugin that lets you quickly build a customizable map without hassling with google maps api. 
 
 [Demo](http://benignware.github.io/jquery-findus)
 
-Usage
------
+## Install
 
-Include dependencies
+Include js dependencies
 
 ```html
 <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="http://maps.googleapis.com/maps/api/js"></script>
-<script src="jquery.findus.min.js"></script>
+<script src="js/jquery.findus.min.js"></script>
 ```
 
-Provide some content containing a geocodeable address:
+Optionally include css
+
+```html
+<link rel="stylesheet" href="css/jquery.findus.css">
+```
+
+## Usage
+
+Provide geocodeable content
 
 ```html
 <div class="findus">
-  <h5>Find us here</h5>
+  <h4>Find us here</h4>
   <address>
   8411 Market Street<br/>
   San Francisco<br/>
   CA 94103<br/>
+  USA
   </address>
 </div>
 ```
 
-Initialize findus:
+Initialize findus
 
 ```js
-$('.findus').findus();
+$(function() {
+  $('.findus').findus();
+});
+```
+
+### Examples
+
+##### Provide location
+You may also reverse-geocode an address from a location:
+
+```html
+<div class="findus" data-latitude="37.77485730000001" data-longitude="-122.41962339999998"></div>
+```
+
+##### Provide location and content
+To avoid the geocoding service completely, provide both, an location and some content to show up in the map's info-window.
+
+```html
+<div class="findus" data-latitude="37.77485730000001" data-longitude="-122.41962339999998">
+  <h4>Find us here</h4>
+  <address>
+  8411 Market Street<br/>
+  San Francisco<br/>
+  CA 94103<br/>
+  USA
+  </address>
+</div>
 ```
 
 Options
 -------
+
+You can also use data-attributes to setup the component. Target subsets by using prefixes, such as 'marker-icon'.
+
 <table>
   <tr>
     <th>Name</th><th>Description</th>
@@ -80,14 +116,12 @@ Options
   </tr>
 </table>
 
-You can also use data-attributes to setup the component. Target options by using prefixes, such as 'marker-icon'.
-
 ## Changelog
 
 #### Master
 
-* Strip phone numbers from geocodeable string
-* Fix null-pointer for infoMap.
+* Optimize geocoding from content
+* Bugfixes
 
 #### v0.0.5
 
