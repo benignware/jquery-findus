@@ -208,13 +208,12 @@
       
       if (opts.latitude && opts.longitude) {
         // By coordinates
-        
-        if (!opts.content || !opts.address) {
+        center = new google.maps.LatLng(opts.latitude, opts.longitude);
+        if (!opts.content && !opts.address) {
           // Reverse geocode address
           FindUs.reverseGeocode( opts.latitude, opts.longitude, function(results, status) {
             geocodeResult = results[0];
             if (status === google.maps.GeocoderStatus.OK) {
-              center = new google.maps.LatLng(opts.latitude, opts.longitude);
               updateMap();
             } else {
               console.warn("Geocoder returned with error: ", status);
