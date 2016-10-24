@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     }, 
     // Lint definitions
     jshint: {
-      all: ["src/**.js"],
+      all: ["src/js/**.js"],
       options: {
         jshintrc: ".jshintrc"
       }
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'dist/jquery.findus.min.js': [ 'dist/jquery.findus.js']
+          'dist/js/jquery.findus.min.js': [ 'dist/js/jquery.findus.js']
         }
       }
     },

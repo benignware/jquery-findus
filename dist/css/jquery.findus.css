@@ -1,0 +1,7 @@
+/* Remove additional margins in info-window */
+.findus .gm-style-iw > div > div > *:first-child {
+  margin-top: 0;
+}
+.findus .gm-style-iw > div > div > *:last-child {
+  margin-bottom: 0;
+}

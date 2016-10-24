@@ -2,6 +2,7 @@
   
   var 
     geocoded = {},
+    geocoder = null,
     reverseGeocoded = {},
     
     /**
@@ -21,7 +22,24 @@
         }
       }
       return options;
-    };
+    },
+    // http://stackoverflow.com/questions/5796718/html-entity-decode
+    decodeEntities = (function() {
+      // this prevents any overhead from creating the object each time
+      var element = document.createElement('div');
+      function decodeHTMLEntities (str) {
+        if(str && typeof str === 'string') {
+          // strip script/html tags
+          str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+          str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+          element.innerHTML = str;
+          str = element.textContent;
+          element.textContent = '';
+        }
+        return str;
+      }
+      return decodeHTMLEntities;
+  })();
   
   function FindUs(elem, options) {
     
@@ -66,7 +84,7 @@
       marker,
       infoWindow,
       infoWindowTimeoutId,
-      geocoder;
+      geocodeResult = null;
       
     function resizeHandler(e) {
       instance.resize();
@@ -95,16 +113,12 @@
     
     function updateMarker() {
       
-      return;
-      
       var 
         markerOptions = $.extend(true, {}, opts.marker, {
           map: map,
           position: center
         }), 
         markerPosition = marker && marker.getPosition() || null;
-      
-      
       
       if (marker) {
         // Update marker
@@ -119,6 +133,10 @@
       updateInfoWindow();
       
       // Open Window
+      if (!infoWindow) {
+        return;
+      }
+      
       clearTimeout(infoWindowTimeoutId);
       if (opts.info && opts.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
         infoWindowTimeoutId = setTimeout(function() {
@@ -131,15 +149,10 @@
     }
     
     function updateInfoWindow() {
-      return;
       var infoOpts;
       if (opts.info) {
         infoOpts = $.extend(true, {}, opts.info, {
-          content: opts.content || opts.address && $.trim(opts.address).split(",").join("<br/>") || (function(lat, lng) {
-            if (reverseGeocoded[lat + "," + lng]) {
-              return reverseGeocoded[lat + "," + lng][0].formatted_address.split(",").join("<br/>");
-            }
-          })(opts.latitude, opts.longitude)
+          content: opts.content || (opts.address || geocodeResult && geocodeResult.formatted_address).split(/,|\n|<\s*br\s*\/?\s*>/).join("<br/>")
         });
         if (infoWindow) {
           // Update InfoWindow
@@ -164,7 +177,6 @@
         center: center
       });
       if (map) {
-        console.log("update map: ", mapOptions);
         // Update map
         map.setOptions(mapOptions);
       } else {
@@ -178,7 +190,6 @@
       google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
         // Update marker when tiles have been loaded
         updateMarker();
-        
       });
       
     }
@@ -195,16 +206,15 @@
         return;
       }
       
-      geocoder = geocoder || new google.maps.Geocoder();
-      
       if (opts.latitude && opts.longitude) {
         // By coordinates
-        center = new google.maps.LatLng(opts.latitude, opts.longitude);
+        
         if (!opts.content || !opts.address) {
-          // Reverse geocode
-          geocoder.geocode( { 'latLng': center }, function(results, status) {
+          // Reverse geocode address
+          FindUs.reverseGeocode( opts.latitude, opts.longitude, function(results, status) {
+            geocodeResult = results[0];
             if (status === google.maps.GeocoderStatus.OK) {
-              reverseGeocoded[opts.latitude + "," + opts.longitude] = results;
+              center = new google.maps.LatLng(opts.latitude, opts.longitude);
               updateMap();
             } else {
               console.warn("Geocoder returned with error: ", status);
@@ -215,38 +225,16 @@
         }
         
       } else if (opts.content || opts.address) {
-        // By address or content
-        var
-          string = $.map((opts.address || opts.content && (function(content) {
-            return content.match(/<address/) && $("<div>" + content + "</div>").find('address').html() || content;
-          })(opts.content)).split(/<(?:.|\n)*?>/gm), function(string) {
-            var value = $.trim(string);
-            return value || null;
-          }).join(",");
-        
-        // Strip phone numbers from geocodable string
-        string = string.replace(/\+\s*\d+[-\d\s\(\)]+/gi, '');
-        string = string.replace(/phone/gi, '');
-        
-        
-        // Geocode
-        if (geocoded[string]) {
-          // Get location from cached geocoded results
-          center = geocoded[string][0].geometry.location;
-          updateMap();
-        } else {
-          // Geocode
-          geocoder.geocode( { 'address': string }, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-              console.log("GEO CODED: ", results);
-              geocoded[string] = results;
-              center = geocoded[string][0].geometry.location;
-              updateMap();
-            } else {
-              console.warn("Geocoder returned with error '" + status + "' for string '" + string + "'");
-            }
-          });
-        }
+        // Geocode by address or content
+        FindUs.geocode(opts.address || opts.content, function(results, status) {
+          geocodeResult = results[0];
+          if (status === google.maps.GeocoderStatus.OK) {
+            center = results[0].geometry.location;
+            updateMap();
+          } else {
+            console.warn("Geocoder returned with error: ", status);
+          }
+        });
       }
       
       // Resize
@@ -314,6 +302,126 @@
     }
     
   }
+  
+  /**
+   * Geocode coordinates from string
+   */
+  FindUs.geocode = (function() {
+    var
+      geocoder = null,
+      responseCache = {},
+      stringCache = {},
+      geocode = function(string, callback) {
+        var
+          responseCacheResult = responseCache[string];
+        // Try to get the result from cache
+        if (responseCacheResult) {
+          callback(responseCacheResult.results, responseCacheResult.status);
+          return;
+        }
+        
+        // Get geocoder instance
+        geocoder = geocoder || new google.maps.Geocoder();
+        // Actually send geocode request
+        geocoder.geocode( { 'address': string }, function(results, status) {
+          // Save the result to cache
+          responseCache[string] = {
+            results: results,
+            status: status
+          };
+          // Callback
+          callback(status === google.maps.GeocoderStatus.OK ? results : false, status);
+        });
+      };
+    return function(string, callback) {
+      
+      var
+        testString = stringCache[string] || (function(string) {
+          
+          // Look for an address tag
+          string = string.match(/<address/) && $("<div>" + string + "</div>").find('address').html().trim() || string;
+          
+          // Decode entities
+          string = decodeEntities(string);
+          
+          // Strip html tags and line breaks
+          string = string.split(/<(?:.|\n)*?>|\n+/gm)
+            // Trim paragraphs
+            .map(function(string) {
+              return string.trim();
+            })
+            // Remove empty paragraphs
+            .filter(function(string) {
+              return string;
+            }).join(", ");
+          
+          return string;
+        })(string);
+      
+      // Geocode the entire string
+      geocode(testString, function(results, status) {
+        if (results) {
+          // Return successful result
+          callback(results, status);
+          return;
+        }
+        // If no exact match, geocode parts of the string 
+        var array = testString.split(/(?:\n|,|<br\/?>)+/);
+        var matchingResults = {};
+        array.forEach(function(string) {
+          geocode(string, function(results, status) {
+            // Capture full matches
+            matchingResults[string] = status === google.maps.GeocoderStatus.OK && !results[0].partial_match && results[0] || false;
+            if (Object.keys(matchingResults).length === array.length) {
+              // Concatenate matching strings
+              string = array.filter(function(string) {
+                return matchingResults[string] !== false;
+              }).join(", ");
+              // Finally geocode successful matches
+              geocode(string, function(results, status) {
+                // Override response cache with concatenated string result
+                responseCache[testString] = {
+                  results: results,
+                  status: status
+                };
+                callback(results, status);
+              });
+            }
+          });
+        });
+      });
+    }
+  })();
+  
+  /**
+   * Reverse geocode address from coordinates
+   */
+  FindUs.reverseGeocode = (function() {
+    var
+      geocoder = null,
+      responseCache = {};
+    return function(latitude, longitude, callback) {
+      var
+        responseCacheId = latitude + "," + longitude,
+        latLng = new google.maps.LatLng(latitude, longitude),
+        responseCacheResult = responseCache[responseCacheId];
+      // Get geocoder instance
+      geocoder = geocoder || new google.maps.Geocoder();
+      // Try to get result from cache
+      if (responseCacheResult) {
+        callback(responseCacheResult.results, responseCacheResult.status);
+        return;
+      }
+      // Actually send geocode request
+      geocoder.geocode( { 'latLng': latLng }, function(results, status) {
+        responseCache[responseCacheId] = {
+          results: results,
+          status: status
+        };
+        callback(results, status);
+      });
+    };
+  })();
   
   // Add Plugin to registry
   $.fn.findus = function() {
