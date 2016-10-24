@@ -84,8 +84,27 @@ You can also use data-attributes to setup the component. Target options by using
 
 ## Changelog
 
-* v0.0.5 - Added fix for map-icons
-* v0.0.4 - Map option 'draggable' defaults to false now
-* v0.0.3 - Fixed too strict jquery dependency
-* v0.0.2 - Added prefixed data-attributes. Changed zoom default to 14. Draggable map by default.
-* v0.0.1 - Initial Release
+#### Master
+
+* Strip phone numbers from geocodeable string
+* Fix null-pointer for infoMap.
+
+#### v0.0.5
+
+* Added fix for map-icons
+
+#### v0.0.4
+
+* Set map option 'draggable' default to false
+
+#### v0.0.3 
+
+* Fixed too strict jquery dependency
+
+#### v0.0.2
+
+* Added prefixed data-attributes. Changed zoom default to 14. Draggable map by default.
+
+#### v0.0.1
+
+* Initial Release
