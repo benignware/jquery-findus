@@ -29,12 +29,12 @@ Provide geocodeable content
 ```html
 <div class="findus">
   <h4>Find us here</h4>
-  <address>
-  8411 Market Street<br/>
-  San Francisco<br/>
-  CA 94103<br/>
-  USA
-  </address>
+  <p>
+    8411 Market Street<br/>
+    San Francisco<br/>
+    CA 94103<br/>
+    USA
+  </p>
 </div>
 ```
 
@@ -61,12 +61,12 @@ To avoid the geocoding service completely, provide both, an location and some co
 ```html
 <div class="findus" data-latitude="37.77485730000001" data-longitude="-122.41962339999998">
   <h4>Find us here</h4>
-  <address>
-  8411 Market Street<br/>
-  San Francisco<br/>
-  CA 94103<br/>
-  USA
-  </address>
+  <p>
+    8411 Market Street<br/>
+    San Francisco<br/>
+    CA 94103<br/>
+    USA
+  </p>
 </div>
 ```
 
