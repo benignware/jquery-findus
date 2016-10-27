@@ -29,12 +29,10 @@ Provide geocodeable content
 ```html
 <div class="findus">
   <h4>Find us here</h4>
-  <p>
-    8411 Market Street<br/>
-    San Francisco<br/>
-    CA 94103<br/>
-    USA
-  </p>
+  8411 Market Street<br/>
+  San Francisco<br/>
+  CA 94103<br/>
+  USA
 </div>
 ```
 
