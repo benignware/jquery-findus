@@ -112,7 +112,7 @@
           if (!this.isRunning) {
             this.next();
           }
-        }
+        };
         this.next = function() {
           var
             requestQueue = this,
@@ -125,7 +125,7 @@
           } else {
             this.isRunning = false;
           }
-        }
+        };
       }
         
       function GeocoderRequest(options, callback) {
@@ -169,7 +169,7 @@
             // Object callback
             geocoderRequest.callback(results, status);
           });
-        }
+        };
       }  
       
       
@@ -189,7 +189,7 @@
             options.location = {
               latitude: arguments[0],
               longitude: arguments[1]
-            }
+            };
             callback = arguments[2];
           }
           
@@ -238,7 +238,7 @@
               }));
             });
           }));
-        }
+        };
       };
       
       
@@ -518,7 +518,7 @@
    var
      opts = $.extend(true, {}, defaults, options, {
        content: content,
-     }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"]))
+     }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"]));
    
     // Initial update
    this.update(opts);
