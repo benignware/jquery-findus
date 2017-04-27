@@ -573,7 +573,7 @@
     $target
       .css('display', 'block')
       .find('*').map(function() {
-        return $(this).data(pluginName) || null;
+        return $(this).data('findus') || null;
       }).each(function() {
         this.resize();
       });

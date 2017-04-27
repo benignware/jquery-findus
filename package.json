@@ -2,7 +2,7 @@
   "name": "jquery-findus",
   "description": "Create contact maps easily",
   "version": "0.0.5",
-  "main": "./src/jquery.findus.js",
+  "main": "./src/js/jquery.findus.js",
   "homepage": "http://benignware.github.io/jquery-findus",
   "author": {
     "name": "Benignware",
