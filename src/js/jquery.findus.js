@@ -1,7 +1,18 @@
-(function($) {
-   
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['jquery'], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    // Node/CommonJS
+    module.exports = factory(require('jquery'));
+  } else {
+    // Browser globals
+    factory(jQuery);
+  }
+}(function ($) {
+
   var
-  
+
     /**
      * Converts data-options to camel-case while respecting object-prefixes
      */
@@ -20,7 +31,7 @@
       }
       return options;
     },
-  
+
     /***
      * Geocoder Wrapper Class
      */
@@ -34,7 +45,7 @@
         PATTERN_EMAIL = /(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})/i;
         // https://gist.github.com/dperini/729294
         PATTERN_URL = /(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?/,
-        
+
         // An item is considered as a word followed by a separation character such as colon
         PATTERN_ITEM = /[\w-_\s]+\s*[\s\:\|]\s*/i,
         // A strict item does not accept whitespace as delimiter
@@ -44,7 +55,7 @@
         PATTERN_ITEM_INT_PHONE = new RegExp(PATTERN_ITEM.source + PATTERN_INT_PHONE.source),
         PATTERN_ITEM_EMAIL = new RegExp(PATTERN_ITEM.source + PATTERN_EMAIL.source),
         PATTERN_ITEM_URL = new RegExp(PATTERN_ITEM.source + PATTERN_URL.source);
-            
+
         geocoderImpl = null,
         requestQueue = new RequestQueue(),
         responseCache = {},
@@ -102,8 +113,8 @@
             return string;
           })(string);
         };
-        
-        
+
+
       function RequestQueue() {
         this.queue = [];
         this.isRunning = false;
@@ -127,7 +138,7 @@
           }
         };
       }
-        
+
       function GeocoderRequest(options, callback) {
         this.options = options || {};
         this.callback = callback;
@@ -170,16 +181,16 @@
             geocoderRequest.callback(results, status);
           });
         };
-      }  
-      
-      
+      }
+
+
       function Geocoder() {
-      
+
         var
           geocoder = this;
-          
+
         this.geocode = function(options, callback) {
-          
+
           options = options || {};
           if (typeof arguments[0] === "string" && typeof arguments[1] === "function") {
             // Geocode location from string
@@ -192,23 +203,23 @@
             };
             callback = arguments[2];
           }
-          
+
           // Optimize address string
           if (options.address) {
             options.address = getGeocodeableString(options.address);
           }
-          
+
           if (options.location && options.location.latitude && options.location.longitude) {
             options.location = new google.maps.LatLng(options.location.latitude, options.location.longitude);
           }
-          
+
           requestQueue.add(new GeocoderRequest(options, function(results, status) {
             if (results.length || !options.address) {
               // Return successful result
               callback(results, status);
               return;
             }
-            // If no exact match, geocode parts of the string 
+            // If no exact match, geocode parts of the string
             var array = options.address.split(/(?:\n|,|<br\/?>)+/);
             var matchingResults = {};
             array.forEach(function(string) {
@@ -240,10 +251,10 @@
           }));
         };
       };
-      
-      
+
+
       Geocoder.DELAY = 500;
-      
+
       return new Geocoder();
     })();
 
@@ -252,12 +263,12 @@
    * FindUs Implementation
    */
   function FindUs(elem, options) {
-    
+
     if (!google || !google.maps) {
       console.error("jquery-findus needs Google Maps API");
       return;
     }
-    
+
     var
       defaults = {
         address: "",
@@ -272,20 +283,20 @@
           zoom: 14,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: true,
-          draggable: false, 
-          zoomControl: false, 
-          scrollwheel: false, 
+          draggable: false,
+          zoomControl: false,
+          scrollwheel: false,
           disableDoubleClickZoom: true
         },
         marker: {
           // Marker options
           //animation: google.maps.Animation.DROP
         },
-        minWidth: 0, 
+        minWidth: 0,
         minHeight: 460
       },
       opts = {},
-      instance = this, 
+      instance = this,
       $elem = $(elem),
       content = $elem.html().replace(/^\s+|\s+$/g, ''),
       center,
@@ -295,15 +306,15 @@
       infoWindow,
       infoWindowTimeoutId,
       geocodeResult = null;
-      
+
     function resizeHandler(e) {
       instance.resize();
     }
-    
+
     function centerChanged(event) {
       center = map.getCenter();
     }
-    
+
     function markerClickHandler(event) {
       if ((opts.content || opts.address) && infoWindow) {
         var infoWindowOpened = (infoWindow.getMap());
@@ -314,23 +325,23 @@
         }
       }
     }
-    
+
     function mapClickHandler() {
       if (infoWindow) {
         infoWindow.close();
       }
     }
-    
+
     // Update marker
     function updateMarker() {
-      
-      var 
+
+      var
         markerOptions = $.extend(true, {}, opts.marker, {
           map: map,
           position: center
-        }), 
+        }),
         markerPosition = marker && marker.getPosition() || null;
-      
+
       if (marker) {
         // Update marker
         marker.setOptions(markerOptions);
@@ -340,15 +351,15 @@
         // Init marker listeners
         google.maps.event.addListener(marker, 'click', markerClickHandler);
       }
-      
+
       // Trigger update on infoWindow
       updateInfoWindow();
-      
+
       // Make sure that infoWindow is defined
       if (!infoWindow) {
         return;
       }
-      
+
       // Open infowindow
       clearTimeout(infoWindowTimeoutId);
       if (opts.info && opts.autoShow && !infoWindow.getMap() && (!markerPosition || markerPosition.lat() !== center.lat() && markerPosition.lng() !== center.lng())) {
@@ -360,7 +371,7 @@
         }, marker.getAnimation() ? 700 : 350);
       }
     }
-    
+
     // Update infowindow
     function updateInfoWindow() {
       var infoOpts;
@@ -382,7 +393,7 @@
         }
       }
     }
-    
+
     // Update map
     function updateMap() {
       if (!center) {
@@ -407,22 +418,22 @@
       google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
         updateMarker();
       });
-      
+
     }
-    
+
     /**
      * Updates the component
      * @param {Object} options
      */
     this.update = function(options) {
-      
+
       $.extend(opts, options);
-      
+
       // Make sure that api has been loaded
       if (!google.maps.Geocoder || !google.maps.LatLng) {
         return;
       }
-      
+
       if (opts.latitude && opts.longitude) {
         // By coordinates
         center = new google.maps.LatLng(opts.latitude, opts.longitude);
@@ -430,7 +441,7 @@
           // Reverse geocode location
           geocoder.geocode( {
             location: {
-              latitude: opts.latitude, 
+              latitude: opts.latitude,
               longitude: opts.longitude
             }
           }, function(results, status) {
@@ -446,7 +457,7 @@
           // No Geocoding required, immediately update map
           updateMap();
         }
-        
+
       } else if (opts.content || opts.address) {
         // Geocode by address or content
         geocoder.geocode({
@@ -461,20 +472,20 @@
           }
         });
       }
-      
+
       // Resize
       this.resize();
     };
-    
+
     // Deprecated, use update(options) instead
     this.setOptions = function(options) {
       this.update(options);
     };
-    
+
     this.getOptions = function() {
       return $.extend({}, opts);
     };
-    
+
     // Resize map container
     function resizeContainer() {
       // Set size
@@ -485,17 +496,17 @@
       // Set text color
       $(elem).css('color', "black");
     }
-    
+
     /**
      * Update geometry
      */
     this.resize = function() {
-      
+
       if (opts.latitude && opts.longitude || opts.address || opts.content) {
         // Only resize container if options have been specified
-        resizeContainer(); 
+        resizeContainer();
       }
-      
+
       if (map) {
         // Adjust center
         google.maps.event.clearListeners(map, 'center_changed');
@@ -504,67 +515,69 @@
           map.setCenter(center);
           google.maps.event.addListener(map, 'center_changed', centerChanged);
         }, 0);
-        
+
         // Resize map
         google.maps.event.trigger(map, 'resize');
       }
-      
+
     };
-    
+
    // Clear elem
    $elem.html('');
-   
+
    // Get options including data-attribtues
    var
      opts = $.extend(true, {}, defaults, options, {
        content: content,
      }, filterPrefixedOptions($elem.data(), ["map", "marker", "info"]));
-   
+
     // Initial update
    this.update(opts);
-   
+
    // Initial resize
    this.resize();
-     
+
     // Init resize handler
     $(window).off('resize', resizeHandler);
     if (opts.bindResize) {
       $(window).on('resize', resizeHandler);
     }
-    
+
   }
-  
+
   // Add Plugin to registry
   $.fn.findus = function() {
     var
-      args = [].slice.call(arguments);
-    return this.each(function() {
-      return (function(instance) {
-        var
-          result;
-        // Update or init plugin
-        $(this).data('findus', instance = instance ? typeof args[0] === 'object' && instance.update(args[0]) && instance || instance : new FindUs(this, args[0]));
-        result = typeof args[0] === 'string' && typeof instance[args[0]] === 'function' ? instance[args[0]].apply(instance, args.slice(1)) : result;
-        // Return undefined or chaining element
-        return typeof result !== 'undefined' ? result : this;
-      }).call(this, $(this).data('findus'));
-    });
+      args = [].slice.call(arguments),
+      result = this.each(function() {
+        return (function(instance) {
+          var
+            result;
+          // Update or init plugin
+          $(this).data('findus', instance = instance ? typeof args[0] === 'object' && instance.setOptions(args[0]) && instance || instance : new FindUs(this, args[0]));
+          // Call method
+          result = typeof args[0] === 'string' && typeof instance[args[0]] === 'function' ? instance[args[0]].apply(instance, args.slice(1)) : result;
+          // Return undefined or chaining element
+          return typeof result !== 'undefined' ? result : this;
+        }).call(this, $(this).data('findus'));
+      });
+    return result;
   };
-  
+
   // Bootstrap compatibility
   $(document).on('show.bs.tab show.bs.modal show.bs.collapse', function(e) {
-    var 
+    var
       $target = $(e.target),
       href;
     $target = $($target.attr('data-target') || (href = $target.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') || e.target);
     $target
       .css('display', 'block')
       .find('*').map(function() {
-        return $(this).data('findus') || null; 
+        return $(this).data('findus') || null;
       }).each(function() {
         this.resize();
       });
     $target.css('display', '');
   });
-  
-})(jQuery);
+
+}));
